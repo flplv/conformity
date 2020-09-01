@@ -31,6 +31,10 @@ class GraspAction(Behavior):
     def on_disable(self):
         #todo send open fork commands to fork subsystem
         pass
+    def on_prepare_tick(self):
+        #todo send open fork commands to fork subsystem
+        # return true if fork is open
+        pass
 
 class BallGraspped(Condition):
     def on_tick(self):
@@ -50,6 +54,17 @@ class GoToBasketLocation(Behavior):
         pass
 
 
+class DropBall(Behavior):
+
+    def on_enable(self):
+        #todo send open fork commands to fork subsystem
+        pass
+
+    def on_disable(self):
+        #todo send open fork commands to fork subsystem
+        pass
+
+
 def my_example_application():
 
     a_ball_in_sight = register('a_ball_in_sight', ABallInSight)
@@ -60,7 +75,7 @@ def my_example_application():
 
     in_basket_location = register('in_basket_location', InBasketLocation)
     go_to_basket_location = register('go_to_basket_location', GoToBasketLocation)
-    drop_ball = register('drop_ball', DropBall())
+    drop_ball = register('drop_ball', DropBall)
 
     connect(a_ball_in_sight, 'get_ball', pursue_ball, 'set_ball')
 
@@ -69,7 +84,9 @@ def my_example_application():
         if check(a_ball_in_sight):
             activate(pursue_ball)
 
-        if check(a_ball_in_fork):
+        prepare(grasp_action) 
+
+        if check(a_ball_in_fork) and is_prepared(grasp_action):
             activate(grasp_action)
 
     else:
@@ -77,6 +94,7 @@ def my_example_application():
             activate(drop_ball)
         else:
             activate(go_to_basket_location)
+
 
 if __name__ == '__main__':
     pass
