@@ -12,6 +12,7 @@ class Object(object):
 
     def __init__(self, name):
         self.name = name
+        self.on_setup()
 
     def activate(self):
         if self.state == ObjectState.PREPARING:
@@ -96,4 +97,7 @@ class Object(object):
         pass
 
     def on_teardown(self):
+        pass
+
+    def on_setup(self):
         pass
