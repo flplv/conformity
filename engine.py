@@ -17,7 +17,7 @@ class Registry:
         if name not in self.declarations.keys():
             raise Exception("Unable to crate instance of {}, it was not registered.".format(name))
         klass = self.declarations[name]
-        obj = klass()
+        obj = klass(name)
         self.instances[name] = obj
         return obj
 
@@ -78,7 +78,11 @@ class Engine:
     def __init__(self, behavior_description_function):
         self.bdf = behavior_description_function
     
-    def on_tick(self):
+    def tick(self):
+        # Tick instances
+        for _, obj in self.registry.instances.items():
+            obj.tick()
+
         # Eval the user function
         self.bdf(BdfCallbacks(self.registry))
 
@@ -87,9 +91,5 @@ class Engine:
         for _, obj in deletions.items():
             obj.tear_down()
         del deletions
-
-        # Tick instances
-        for _, obj in self.registry.instances.items():
-            obj.tick()
 
 

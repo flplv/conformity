@@ -1,4 +1,3 @@
-import copy
 import unittest
 from unittest.mock import MagicMock
 
@@ -96,3 +95,11 @@ class TestObject(unittest.TestCase):
         
         cut.on_preparation.assert_not_called()
         cut.on_preparation_cancel.assert_not_called()
+        
+    def test_object_is_true(self):
+        cut = make_mocked_object()
+        self.assertFalse(cut.is_true("aaa"))
+        cut.aaa = False
+        self.assertFalse(cut.is_true("aaa"))
+        cut.aaa = True
+        self.assertTrue(cut.is_true("aaa"))

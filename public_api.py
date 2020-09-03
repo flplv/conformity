@@ -89,7 +89,7 @@ def register(object_name, object_type):
 def connect(object_from, from_method_name, object_to, to_method_name):
     """Connects data from one object to another
     """
-    pass
+    pass    
 
 
 def prepare(object):
