@@ -5,7 +5,8 @@ import time
 class ABallInSight(Condition):
     def on_tick(self):
         #todo search vision subsystem or world model for a ball
-        self.condition_met = False
+        self.condition_met = True
+    
     def get_ball(self):
         return None
 
@@ -17,30 +18,33 @@ class ABallInFork(Condition):
 class BallGraspped(Condition):
     def on_tick(self):
         #todo check sensors if grasp was detected and set self.condition_met
-        pass
+        self.condition_met = False
 
 class InBasketLocation(Condition):
     def on_tick(self):
         #todo check sensors to verify that the robot is in the basket location
-        pass
+        self.condition_met = False
 
 class PursueBall(Behavior):
     def on_tick(self):
-        print(self.name + " tick")
         #todo send goals to the navigation subsystem
-        pass
+        print(self.name + " tick")
+    
     def set_ball(self, ball):
         self.ball = ball
 
 class GraspAction(Behavior):
     def on_tick(self):
         print(self.name + " tick")
+    
     def on_activation(self):
         #todo send close fork commands to fork subsystem
         pass
+    
     def on_deactivation(self):
         #todo send open fork commands to fork subsystem
         pass
+    
     def on_preparation_tick(self):
         #todo send open fork commands to fork subsystem
         # return true if fork is open
@@ -59,7 +63,7 @@ class DropBall(Behavior):
     def on_activation(self):
         #todo send open fork commands to fork subsystem
         pass
-
+    
     def on_deactivation(self):
         #todo send open fork commands to fork subsystem
         pass
@@ -79,18 +83,18 @@ def my_example_application(api : BdfCallbacks):
 
     api.connect(a_ball_in_sight, 'get_ball', pursue_ball, 'set_ball')
 
-    if not api.check(ball_grasped):
+    if not api.check(ball_grasped, "condition_met"):
 
-        if api.check(a_ball_in_sight):
+        if api.check(a_ball_in_sight, "condition_met"):
             api.activate(pursue_ball)
 
         api.prepare(grasp_action) 
 
-        if api.check(a_ball_in_fork) and api.is_prepared(grasp_action):
+        if api.check(a_ball_in_fork, "condition_met") and api.is_prepared(grasp_action):
             api.activate(grasp_action)
 
     else:
-        if api.check(in_basket_location):
+        if api.check(in_basket_location, "condition_met"):
             api.activate(drop_ball)
         else:
             api.activate(go_to_basket_location)
