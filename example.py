@@ -1,102 +1,110 @@
 from public_api import *
-
+from engine import *
+import time
 
 class ABallInSight(Condition):
     def on_tick(self):
         #todo search vision subsystem or world model for a ball
         self.condition_met = False
-
     def get_ball(self):
         return None
-
 
 class ABallInFork(Condition):
     def on_tick(self):
         #todo check fork camera for a ball
         self.condition_met = False
 
-
-class PursueBall(Behavior):
-    def on_tick(self):
-        #todo send goals to the navigation subsystem
-        pass
-
-    def set_ball(self, ball):
-        self.ball = ball
-
-class GraspAction(Behavior):
-    def on_enable(self):
-        #todo send close fork commands to fork subsystem
-        pass
-    def on_disable(self):
-        #todo send open fork commands to fork subsystem
-        pass
-    def on_prepare_tick(self):
-        #todo send open fork commands to fork subsystem
-        # return true if fork is open
-        pass
-
 class BallGraspped(Condition):
     def on_tick(self):
         #todo check sensors if grasp was detected and set self.condition_met
         pass
-
 
 class InBasketLocation(Condition):
     def on_tick(self):
         #todo check sensors to verify that the robot is in the basket location
         pass
 
+class PursueBall(Behavior):
+    def on_tick(self):
+        print(self.name + " tick")
+        #todo send goals to the navigation subsystem
+        pass
+    def set_ball(self, ball):
+        self.ball = ball
+
+class GraspAction(Behavior):
+    def on_tick(self):
+        print(self.name + " tick")
+    def on_activation(self):
+        #todo send close fork commands to fork subsystem
+        pass
+    def on_deactivation(self):
+        #todo send open fork commands to fork subsystem
+        pass
+    def on_preparation_tick(self):
+        #todo send open fork commands to fork subsystem
+        # return true if fork is open
+        pass
 
 class GoToBasketLocation(Behavior):
     def on_tick(self):
+        print(self.name + " tick")
         #todo send basket goal to the navigation subsystem
-        pass
-
 
 class DropBall(Behavior):
-
-    def on_enable(self):
+    def on_tick(self):
+        print(self.name + " tick")
+        #todo send basket goal to the navigation subsystem
+    
+    def on_activation(self):
         #todo send open fork commands to fork subsystem
         pass
 
-    def on_disable(self):
+    def on_deactivation(self):
         #todo send open fork commands to fork subsystem
         pass
 
 
-def my_example_application():
+def my_example_application(api : BdfCallbacks):
+    
+    a_ball_in_sight = api.register('a_ball_in_sight', ABallInSight)
+    pursue_ball = api.register('pursue_ball', PursueBall)
+    a_ball_in_fork = api.register('a_ball_in_fork', ABallInFork)
+    ball_grasped = api.register('ball_grasped', BallGraspped)
+    grasp_action = api.register('grasp_action', GraspAction)
 
-    a_ball_in_sight = register('a_ball_in_sight', ABallInSight)
-    pursue_ball = register('pursue_ball', PursueBall)
-    a_ball_in_fork = register('a_ball_in_fork', ABallInFork)
-    ball_grasped = register('ball_grasped', BallGraspped)
-    grasp_action = register('grasp_action', GraspAction)
+    in_basket_location = api.register('in_basket_location', InBasketLocation)
+    go_to_basket_location = api.register('go_to_basket_location', GoToBasketLocation)
+    drop_ball = api.register('drop_ball', DropBall)
 
-    in_basket_location = register('in_basket_location', InBasketLocation)
-    go_to_basket_location = register('go_to_basket_location', GoToBasketLocation)
-    drop_ball = register('drop_ball', DropBall)
+    api.connect(a_ball_in_sight, 'get_ball', pursue_ball, 'set_ball')
 
-    connect(a_ball_in_sight, 'get_ball', pursue_ball, 'set_ball')
+    if not api.check(ball_grasped):
 
-    if not check(ball_grasped):
+        if api.check(a_ball_in_sight):
+            api.activate(pursue_ball)
 
-        if check(a_ball_in_sight):
-            activate(pursue_ball)
+        api.prepare(grasp_action) 
 
-        prepare(grasp_action) 
-
-        if check(a_ball_in_fork) and is_prepared(grasp_action):
-            activate(grasp_action)
+        if api.check(a_ball_in_fork) and api.is_prepared(grasp_action):
+            api.activate(grasp_action)
 
     else:
-        if check(in_basket_location):
-            activate(drop_ball)
+        if api.check(in_basket_location):
+            api.activate(drop_ball)
         else:
-            activate(go_to_basket_location)
+            api.activate(go_to_basket_location)
+
+
+def Start():
+    
+    my_engine = Engine(my_example_application)
+
+    while(1):
+        my_engine.tick()
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
-    pass
-
+    Start()
 
