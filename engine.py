@@ -27,7 +27,7 @@ class Registry:
 
     def visit(self, name):
         self.visited.add(name)
-    
+
     def move_unvisited_instances_and_clear_visits(self):
         """Remove marked instances from the `self.instances` and return them.
         Moved instances will actually be deleted if `moves` is not saved elsewhere.
@@ -60,7 +60,7 @@ class BdfCallbacks:
 
     def prepare(self, name):
         obj = self.registry.get_instance(name)
-        obj.activate()
+        obj.prepare()
 
     def is_prepared(self, name):
         obj = self.registry.get_instance(name)
