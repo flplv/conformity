@@ -7,11 +7,10 @@ class ObjectState(Enum):
     ACTIVE = 3
 
 class Object(object):
-    state = ObjectState.DEACTIVE
-    name = ""
 
     def __init__(self, name):
         self.name = name
+        self.state = ObjectState.DEACTIVE
         self.on_setup()
 
     def activate(self):
