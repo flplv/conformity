@@ -1,29 +1,39 @@
 from public_api import *
 from engine import *
 import time
+import sys
+import gorobot
+
+sensor_ball_in_sight = gorobot.MockSensor(period=2)
+sensor_ball_in_fork = gorobot.MockSensor(period=4)
+sensor_ball_grasped = gorobot.MockSensor(period=8)
+sensor_ball_in_basket = gorobot.MockSensor(period=16)
 
 class ABallInSight(Condition):
     def on_tick(self):
         #todo search vision subsystem or world model for a ball
-        self.condition_met = True
-    
+        self.condition_met = sensor_ball_in_sight.get_data_bool(start_true=False)
+        print(self.name + " condition: " + str(self.condition_met))
     def get_ball(self):
         return None
 
 class ABallInFork(Condition):
     def on_tick(self):
         #todo check fork camera for a ball
-        self.condition_met = False
+        self.condition_met = sensor_ball_in_fork.get_data_bool(start_true=False)
+        print(self.name + " condition: " + str(self.condition_met))
 
 class BallGraspped(Condition):
     def on_tick(self):
         #todo check sensors if grasp was detected and set self.condition_met
-        self.condition_met = False
+        self.condition_met = sensor_ball_grasped.get_data_bool(start_true=False)
+        print(self.name + " condition: " + str(self.condition_met))
 
 class InBasketLocation(Condition):
     def on_tick(self):
         #todo check sensors to verify that the robot is in the basket location
-        self.condition_met = False
+        self.condition_met = sensor_ball_in_basket.get_data_bool(start_true=False)
+        print(self.name + " condition: " + str(self.condition_met))
 
 class PursueBall(Behavior):
     def on_tick(self):
@@ -48,7 +58,8 @@ class GraspAction(Behavior):
     def on_preparation_tick(self):
         #todo send open fork commands to fork subsystem
         # return true if fork is open
-        pass
+        print("preparing " + self.name)
+        return True
 
 class GoToBasketLocation(Behavior):
     def on_tick(self):
@@ -101,12 +112,16 @@ def my_example_application(api : BdfCallbacks):
 
 
 def Start():
-    
     my_engine = Engine(my_example_application)
-
+    time_start = time.time()
     while(1):
+        time_elapsed = time.time() - time_start
+        print("time: " + str(time_elapsed))
         my_engine.tick()
+        # sensor_data = gorobot.request_sensor("1")
+        # gorobot.tick_simulation()
         time.sleep(0.5)
+        print("----")
 
 
 if __name__ == '__main__':
