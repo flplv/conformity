@@ -1,9 +1,9 @@
 class Registry:
 
     def __init__(self):
-        self.instances : dict = dict()
-        self.declarations : dict = dict()
-        self.visited : set = set()
+        self.instances = dict()
+        self.declarations = dict()
+        self.visited = set()
 
     def add(self, name, klass):
         if name not in self.declarations.keys():
@@ -43,8 +43,8 @@ class Registry:
 
 class BdfCallbacks:
 
-    def __init__(self, registry):
-        self.registry : Registry = registry
+    def __init__(self, registry: Registry):
+        self.registry = registry
 
     def check(self, name, property_name):
         obj = self.registry.get_instance(name)
@@ -74,7 +74,7 @@ class BdfCallbacks:
 class Engine:
 
     def __init__(self, behavior_description_function):
-        self.registry : Registry = Registry()
+        self.registry = Registry()
         self.bdf = behavior_description_function
     
     def tick(self):
