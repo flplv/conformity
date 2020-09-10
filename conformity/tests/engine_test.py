@@ -2,8 +2,8 @@ import collections
 import unittest
 from unittest.mock import MagicMock
 
-from engine import Engine, BdfCallbacks, Registry
-from object import Object
+from ..engine import Engine, BdfCallbacks, Registry
+from ..object import Object
 
 class TestBdfApi(unittest.TestCase):
     def test_bdf_called_on_tick(self):
@@ -14,11 +14,11 @@ class TestBdfApi(unittest.TestCase):
 
     def test_all_api_functions_defined(self):
         def a_bdf(api: BdfCallbacks):
-            self.assert_(isinstance(api.activate, collections.Callable))
-            self.assert_(isinstance(api.check, collections.Callable))
-            self.assert_(isinstance(api.is_prepared, collections.Callable))
-            self.assert_(isinstance(api.prepare, collections.Callable))
-            self.assert_(isinstance(api.register, collections.Callable))
+            self.assertTrue(isinstance(api.activate, collections.Callable))
+            self.assertTrue(isinstance(api.check, collections.Callable))
+            self.assertTrue(isinstance(api.is_prepared, collections.Callable))
+            self.assertTrue(isinstance(api.prepare, collections.Callable))
+            self.assertTrue(isinstance(api.register, collections.Callable))
         cut = Engine(a_bdf)
         cut.tick()
 

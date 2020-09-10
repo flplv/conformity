@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from object import Object, ObjectState
+from ..object import Object, ObjectState
 
 
 def make_mocked_object():

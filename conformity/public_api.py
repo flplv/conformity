@@ -1,4 +1,4 @@
-from object import Object as _Object
+from .object import Object as _Object
 
 class Condition(_Object):
     """Implements a condition to be checked.

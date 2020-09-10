@@ -1,7 +1,8 @@
-from engine import Engine, BdfCallbacks
 import unittest
-from object_test import Object
 from unittest.mock import MagicMock
+
+from ..engine import Engine, BdfCallbacks
+from ..object import Object
 
 class TestIntegration(unittest.TestCase):
     
