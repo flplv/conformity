@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimulationTickControl : MonoBehaviour
-{
+public class SimulationTickControl : MonoBehaviour {
     private bool _tickReceived = false;
 
     // Allow simulation to run one more tick

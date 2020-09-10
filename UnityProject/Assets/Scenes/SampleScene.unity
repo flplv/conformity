@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc4521d3783fef4db10556a7a1f68a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tireDiameter: 0.3
+  _tireDiameter: 0.3
 --- !u!4 &99231062 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 040c5f9999733774ea90ebc63afa5e9f,
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc4521d3783fef4db10556a7a1f68a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tireDiameter: 0.3
+  _tireDiameter: 0.3
 --- !u!1 &173473001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1911,8 +1911,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20af083601e0ef64a82e589f2d96d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageSynthesis: {fileID: 1011823435}
-  netMQPublisher: {fileID: 222962173}
+  imageSynthesis: {fileID: 0}
+  netMQPublisher: {fileID: 0}
 --- !u!1 &1296891077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,7 +2302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc4521d3783fef4db10556a7a1f68a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tireDiameter: 0.3
+  _tireDiameter: 0.3
 --- !u!1 &1611532729
 GameObject:
   m_ObjectHideFlags: 0
@@ -2791,7 +2791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc4521d3783fef4db10556a7a1f68a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tireDiameter: 0.3
+  _tireDiameter: 0.3
 --- !u!1 &2122677550
 GameObject:
   m_ObjectHideFlags: 0

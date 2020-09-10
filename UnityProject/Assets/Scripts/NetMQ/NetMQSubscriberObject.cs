@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 
 // use example
-public class NetMQSubscriberObject : MonoBehaviour
-{
+public class NetMQSubscriberObject : MonoBehaviour {
     private NetMQSubscriber _netMqListener;
 
-    private void Start()
-    {
+    private void Start() {
         _netMqListener = new NetMQSubscriber(HandleMessage);
         _netMqListener.Start();
     }
 
-    private void Update()
-    {
+    private void Update() {
         _netMqListener.Update();
     }
 
-    private void HandleMessage(string message)
-    {
+    private void HandleMessage(string message) {
         var splittedStrings = message.Split(' ');
         if (splittedStrings.Length != 3) return;
         var x = float.Parse(splittedStrings[0]);
@@ -26,8 +22,7 @@ public class NetMQSubscriberObject : MonoBehaviour
         transform.position = new Vector3(x, y, z);
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         _netMqListener.Stop();
     }
 }

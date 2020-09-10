@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotMovement : MonoBehaviour
-{
+public class BotMovement : MonoBehaviour {
     private Rigidbody _rigidBody;
 
     private void Awake() {

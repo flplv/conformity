@@ -2,30 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositionPublisher : MonoBehaviour
-{
+public class PositionPublisher : MonoBehaviour {
 	public NetMQPublisher netMQPublisher;
+	private const float _sampleRate = 1f; // in seconds -- minimum is Physics Timestep
+	private float _timeStart;
 
-	private const float sampleRate = 1f; // in seconds -- minimum is Physics Timestep
-	private float timeStart;
-
-	private void Start()
-	{
-		timeStart = Time.time;
+	private void Start() {
+		_timeStart = Time.time;
 	}
 
-	private void FixedUpdate()
-	{
-		float elapsedTime = Time.time - timeStart;
-		if (elapsedTime > sampleRate)
-		{
-			timeStart = Time.time;
+	private void FixedUpdate() {
+		float elapsedTime = Time.time - _timeStart;
+		if (elapsedTime > _sampleRate) {
+			_timeStart = Time.time;
 			SendPosition("position");
 		}
 	}
 
-	private void SendPosition(string frameName)
-	{
+	private void SendPosition(string frameName) {
 		string data = $"{transform.position.x} " +
 			$"{transform.position.y} " +
 			$"{transform.position.z} " +

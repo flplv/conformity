@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-public class NetworkRequestHandler : MonoBehaviour
-{
-    [SerializeField]
-    private SimulationTickControl _simulationControl;
+public class NetworkRequestHandler : MonoBehaviour {
+    public SimulationTickControl simulationControl;
     private NetMQReplier _netMqReplier;
     private string _response;
 
@@ -15,7 +13,7 @@ public class NetworkRequestHandler : MonoBehaviour
     private string HandleMessage(string message) {
         // Not on main thread
         if (message == "tick") {
-            _simulationControl.Tick();
+            simulationControl.Tick();
             _response = "tick_ok";
         }
         if (message == "sensor_1") _response = "this_is_sensor_1_data";

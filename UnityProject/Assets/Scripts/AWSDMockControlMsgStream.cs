@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AWSDMockControlMsgStream : MonoBehaviour
-{
-    [SerializeField]
-    private BotMovement _botMovement;
+public class AWSDMockControlMsgStream : MonoBehaviour {
+    public BotMovement botMovement;
     private float _speed;
     private float _angle;
 
@@ -28,7 +26,7 @@ public class AWSDMockControlMsgStream : MonoBehaviour
         if (_angle < 0f) _angle += 360f;
 
         string msg = _speed.ToString() + " " + _angle.ToString();
-        _botMovement.ProcessSpeedAndAngleMessage(msg);
+        botMovement.ProcessSpeedAndAngleMessage(msg);
     }
 
 }

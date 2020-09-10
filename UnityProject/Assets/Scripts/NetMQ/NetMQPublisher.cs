@@ -3,8 +3,7 @@ using UnityEngine;
 using NetMQ;
 using NetMQ.Sockets;
 
-public class NetMQPublisher : MonoBehaviour
-{
+public class NetMQPublisher : MonoBehaviour {
     private PublisherSocket _pubSocket;
 
     private void OnEnable() {
