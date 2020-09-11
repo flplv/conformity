@@ -1911,8 +1911,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20af083601e0ef64a82e589f2d96d5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageSynthesis: {fileID: 0}
-  netMQPublisher: {fileID: 0}
+  imageSynthesis: {fileID: 1011823435}
+  netMQPublisher: {fileID: 222962173}
 --- !u!1 &1296891077
 GameObject:
   m_ObjectHideFlags: 0
