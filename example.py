@@ -1,5 +1,5 @@
-from public_api import *
-from engine import *
+from conformity.public_api import *
+from conformity.engine import *
 import time
 
 class ABallInSight(Condition):
