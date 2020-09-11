@@ -2,8 +2,8 @@ import collections
 import unittest
 from unittest.mock import MagicMock
 
-from ..engine import Engine, BdfCallbacks, Registry
-from ..object import Object
+from conformity.engine import Engine, BdfCallbacks, Registry
+from conformity.object import Object
 
 class TestBdfApi(unittest.TestCase):
     def test_bdf_called_on_tick(self):
