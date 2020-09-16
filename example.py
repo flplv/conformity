@@ -119,7 +119,7 @@ def Start():
         print("time: " + str(time_elapsed))
         my_engine.tick()
         # sensor_data = gorobot.request_sensor("1")
-        # gorobot.tick_simulation()
+        gorobot.tick_simulation()
         time.sleep(0.5)
         print("----")
 
