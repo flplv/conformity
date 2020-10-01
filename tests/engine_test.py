@@ -116,6 +116,7 @@ class TestBdfApi(unittest.TestCase):
         a_object_instance.is_prepared = MagicMock(return_value=False)
         self.assertFalse(api.is_prepared(a_object))
 
+
 class TestEngine(unittest.TestCase):
 
     def test_constructor(self):
