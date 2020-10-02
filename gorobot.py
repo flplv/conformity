@@ -10,26 +10,28 @@ socket = context.socket(zmq.REQ)
 socket.connect("tcp://localhost:12346")
 
 def tick_simulation():
-    socket.send_string("tick")
+    response = send_request("tick")
+    return response
+
+def check_sensor(sensor_name : str):
+    response = send_request("sensor_" + sensor_name)
+    return True if response.decode() == "True" else False
+
+def send_control(control_name : str):
+    response = send_request("control_" + control_name)
+    return response
+
+def send_request(request_msg : str):
+    socket.send_string(request_msg)
     poller = zmq.Poller()
     poller.register(socket, zmq.POLLIN)
     evt = dict(poller.poll(TIMEOUT))
     if evt:
         if evt.get(socket) == zmq.POLLIN:
             response = socket.recv()  # blocking req
-            print(response)  # tick_ok
+            return response
 
-def request_sensor(sensor_name : str):
-    socket.send_string("sensor_" + sensor_name)
-    poller = zmq.Poller()
-    poller.register(socket, zmq.POLLIN)
-    evt = dict(poller.poll(TIMEOUT))
-    if evt:
-        if evt.get(socket) == zmq.POLLIN:
-            response = socket.recv()  # blocking req
-            return(response)
-
-class MockSensor():
+class MockPeriodicSensor():
     ''' Returns periodic data based on sensor start time
     `get_data_sin` returns a float from -1 to 1 according to a sine wave
     `get_data_bool` returns a bool, toggles every half period
