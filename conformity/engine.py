@@ -76,6 +76,7 @@ class Engine:
     def __init__(self, behavior_description_function):
         self.registry = Registry()
         self.bdf = behavior_description_function
+        self.introspection_function = None
     
     def tick(self):
         # Tick instances
@@ -91,4 +92,22 @@ class Engine:
             obj.tear_down()
         del deletions
 
+        if (self.introspection_function):
+            self.introspection_function(self._prepare_introspection(self.registry))
 
+    def set_registry_introspection(self, introspection_function):
+        """ Set a function to receive the behavior introspection data.
+        With the signature `callback(behavior_introspection_data) -> None`.
+        `behavior_introspection_data` is a `map[string] = string` where the key represents
+        the behavior name and the value is behavior's state.
+        """
+        self.introspection_function = introspection_function
+
+    @staticmethod
+    def _prepare_introspection(registry):
+        result = {} # Result is a map of behavior names containing a string describing
+                    # the behavior state
+        result = {name: "deleted" for name in registry.declarations.keys()}
+        for name, instance in registry.instances.items():
+            result[name] = instance.state.name.lower()
+        return result

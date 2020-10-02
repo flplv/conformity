@@ -4,21 +4,18 @@ from unittest.mock import MagicMock
 from conformity.engine import Engine, BdfCallbacks
 from conformity.object import Object
 
+
 class TestIntegration(unittest.TestCase):
     
     def test_simple_conditional_behavior(self):
         condition_value = [False]
-        behavior_active = [False]
 
         class ACondition(Object):
             def on_tick(self):
                 self.a_condition_field = condition_value[0]
 
         class ABehavior(Object):
-            def on_activation(self):
-                behavior_active[0] = True
-            def on_deactivation(self):
-                behavior_active[0] = False
+            pass
         
 
         def bdf(api: BdfCallbacks):
@@ -28,17 +25,26 @@ class TestIntegration(unittest.TestCase):
             if api.check(c, 'a_condition_field'):
                 api.activate(b)
 
+        def introspection(data):
+            introspection.data = data 
+
         cut = Engine(bdf)
+        cut.set_registry_introspection(introspection)
 
         cut.tick()
+        self.assertTrue('a_condition' in introspection.data)
+        self.assertTrue('a_behavior' in introspection.data)
+        self.assertEqual(introspection.data['a_condition'], 'active')
+        self.assertEqual(introspection.data['a_behavior'], 'deleted')
+
         cut.tick()
-        self.assertFalse(behavior_active[0])
+        self.assertEqual(introspection.data['a_behavior'], 'deleted')
         
         condition_value[0] = True
         cut.tick()
-        self.assertTrue(behavior_active[0])
+        self.assertEqual(introspection.data['a_behavior'], 'active')
         
         condition_value[0] = False
         cut.tick()
-        self.assertFalse(behavior_active[0])
+        self.assertEqual(introspection.data['a_behavior'], 'deleted')
 
