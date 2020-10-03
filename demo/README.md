@@ -11,12 +11,30 @@ To advance the simulation in 1 tick (default: 2 ms) you need to send the appropr
 * Effect: Tick simulation forward
   * REQ: "tick"
   * REP: "tick_ok"
-* Effect: Do Nothing
-  * REQ: "sensor_1"
-  * REP: "this_is_sensor_1_data"
-* Effect: Do Nothing
-  * REQ: "control_1"
-  * REP: "control_1_ok"
+* Effect: Check if there's any graspable object in line of sight
+  * REQ: "sensor_objectinsight"
+  * REP: "True" or "False"
+* Effect: Check if there's any graspable object in grasp range
+  * REQ: "sensor_objectinrange"
+  * REP: "True" or "False"
+* Effect: Check if there's any object currently grasped
+  * REQ: "sensor_objectgrasped"
+  * REP: "True" or "False"
+* Effect: Check if robot is in drop zone
+  * REQ: "sensor_robotindropzone"
+  * REP: "True" or "False"
+* Effect: Make the robot go to a graspable object position currently in sight
+  * REQ: "control_gotoobjectposition"
+  * REP: "ok"
+* Effect: Make the robot go to drop zone position
+  * REQ: "control_gotodropzone"
+  * REP: "ok"
+* Effect: Make the robot grasp a graspable object in range
+  * REQ: "control_graspobject"
+  * REP: "ok"
+* Effect: Make the robot drop the currently grasped object
+  * REQ: "control_dropobject"
+  * REP: "ok"
 
 #### To open/build this project you need Unity 2019.4.8f1
 
