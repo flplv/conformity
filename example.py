@@ -1,41 +1,42 @@
 from conformity.public_api import *
 from conformity.engine import *
 import time
+import gorobot
 
 class ABallInSight(Condition):
     def on_tick(self):
         #todo search vision subsystem or world model for a ball
-        self.condition_met = True
-    
+        self.condition_met = gorobot.check_sensor("objectinsight")
+
     def get_ball(self):
         return None
 
 class ABallInFork(Condition):
     def on_tick(self):
         #todo check fork camera for a ball
-        self.condition_met = False
+        self.condition_met = gorobot.check_sensor("objectinrange")
 
 class BallGraspped(Condition):
     def on_tick(self):
         #todo check sensors if grasp was detected and set self.condition_met
-        self.condition_met = False
+        self.condition_met = gorobot.check_sensor("objectgrasped")
 
 class InBasketLocation(Condition):
     def on_tick(self):
         #todo check sensors to verify that the robot is in the basket location
-        self.condition_met = False
+        self.condition_met = gorobot.check_sensor("robotindropzone")
 
 class PursueBall(Behavior):
     def on_tick(self):
         #todo send goals to the navigation subsystem
-        print(self.name + " tick")
+        gorobot.send_control("gotoobjectposition")
     
     def set_ball(self, ball):
         self.ball = ball
 
 class GraspAction(Behavior):
     def on_tick(self):
-        print(self.name + " tick")
+        gorobot.send_control("graspobject")
     
     def on_activation(self):
         #todo send close fork commands to fork subsystem
@@ -48,16 +49,16 @@ class GraspAction(Behavior):
     def on_preparation_tick(self):
         #todo send open fork commands to fork subsystem
         # return true if fork is open
-        pass
+        return True
 
 class GoToBasketLocation(Behavior):
     def on_tick(self):
-        print(self.name + " tick")
+        gorobot.send_control("gotodropzone")
         #todo send basket goal to the navigation subsystem
 
 class DropBall(Behavior):
     def on_tick(self):
-        print(self.name + " tick")
+        gorobot.send_control("dropobject")
         #todo send basket goal to the navigation subsystem
     
     def on_activation(self):
@@ -101,12 +102,10 @@ def my_example_application(api : BdfCallbacks):
 
 
 def Start():
-    
     my_engine = Engine(my_example_application)
-
     while(1):
         my_engine.tick()
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 
 if __name__ == '__main__':
