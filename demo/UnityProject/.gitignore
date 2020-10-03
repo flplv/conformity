@@ -1,5 +1,3 @@
-/obj/
-
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
@@ -97,3 +95,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+/obj/
+/Assets/Scripts/Unused/
+/Assets/Scripts/Unused.meta
+/WinBuild/

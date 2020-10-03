@@ -3,34 +3,42 @@ using UnityEngine;
 using NetMQ;
 using NetMQ.Sockets;
 
-public class NetMQPublisher : MonoBehaviour {
-    private PublisherSocket _pubSocket;
+public class NetMQPublisher : MonoBehaviour 
+{
+    private PublisherSocket pubSocket;
 
-    private void OnEnable() {
+    public void PublishData(string topic, byte[] data) 
+    {
+        pubSocket.SendMoreFrame(topic).SendFrame(data);
+    }
+
+    public void PublishData(string topic, string data) 
+    {
+        pubSocket.SendMoreFrame(topic).SendFrame(data);
+    }
+
+    private void OnEnable() 
+    {
         PreparePublishing();
     }
 
-    public void PublishData(string topic, byte[] data) {
-        _pubSocket.SendMoreFrame(topic).SendFrame(data);
+    private void OnDisable() 
+    {
+        StopPublishing();
     }
 
-    public void PublishData(string topic, string data) {
-        _pubSocket.SendMoreFrame(topic).SendFrame(data);
-    }
-
-    private void PreparePublishing() {
+    private void PreparePublishing() 
+    {
         AsyncIO.ForceDotNet.Force();
-        _pubSocket = new PublisherSocket();
-        _pubSocket.Options.SendHighWatermark = 100;
-        _pubSocket.Bind("tcp://localhost:12344");
+        pubSocket = new PublisherSocket();
+        pubSocket.Options.SendHighWatermark = 100;
+        pubSocket.Bind("tcp://localhost:12344");
     }
 
-    private void StopPublishing() {
-        _pubSocket.Close();
+    private void StopPublishing() 
+    {
+        pubSocket.Close();
         NetMQConfig.Cleanup();
     }
 
-    private void OnDisable() {
-        StopPublishing();
-    }
 }

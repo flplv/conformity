@@ -1,42 +1,50 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Threading;
 using NetMQ;
 using NetMQ.Sockets;
 
-public class NetMQReplier {
+public class NetMQReplier
+{
     public delegate string MessageDelegate(string message);
-    private bool _listenerCancelled;
-    private readonly MessageDelegate _messageDelegate;
-    private readonly Thread _listenerWorker;
-    private readonly Stopwatch _contactWatch;
+    private bool listenerCancelled;
+    private readonly MessageDelegate messageDelegate;
+    private readonly Thread listenerWorker;
+    private readonly Stopwatch contactWatch;
 
-    public NetMQReplier(MessageDelegate messageDelegate) {
-        _messageDelegate = messageDelegate;
-        _contactWatch = new Stopwatch();
-        _contactWatch.Start();
-        _listenerWorker = new Thread(ListenerWork);
+    public NetMQReplier(MessageDelegate messageDelegate) 
+    {
+        this.messageDelegate = messageDelegate;
+        contactWatch = new Stopwatch();
+        contactWatch.Start();
+        listenerWorker = new Thread(ListenerWork);
     }
 
-    public void Start() {
-        _listenerCancelled = false;
-        _listenerWorker.Start();
+    public void Start() 
+    {
+        listenerCancelled = false;
+        listenerWorker.Start();
     }
 
-    public void Stop() {
-        _listenerCancelled = true;
-        _listenerWorker.Join();
+    public void Stop() 
+    {
+        listenerCancelled = true;
+        listenerWorker.Join();
     }
 
-    private void ListenerWork() {
+    private void ListenerWork() 
+    {
         AsyncIO.ForceDotNet.Force();
-        using (var server = new ResponseSocket()) {
+        using (var server = new ResponseSocket()) 
+        {
             server.Bind("tcp://*:12346");
 
-            while (!_listenerCancelled) {
+            while (!listenerCancelled) 
+            {
                 string message;
                 if (!server.TryReceiveFrameString(out message)) continue;
-                _contactWatch.Restart();
-                var response = _messageDelegate(message);
+                contactWatch.Restart();
+                var response = messageDelegate(message);
                 server.SendFrame(response);
             }
         }
