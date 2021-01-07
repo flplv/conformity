@@ -7,10 +7,16 @@ class ABallInSight(Condition):
     def on_tick(self):
         #todo search vision subsystem or world model for a ball
         self.condition_met = gorobot.check_sensor("objectinsight")
+        self.balls = gorobot.get_all_balls();
+        self.robot_location = gorobot.get_robot_location();
 
-    def get_ball(self):
-        return None
-
+    def closest_ball(self):
+        return find_closest(self.balls, self.robot_location);
+    
+    @stasticmethod
+    def find_closest(balls, location):
+        pass
+                     
 class ABallInFork(Condition):
     def on_tick(self):
         #todo check fork camera for a ball
@@ -26,13 +32,13 @@ class InBasketLocation(Condition):
         #todo check sensors to verify that the robot is in the basket location
         self.condition_met = gorobot.check_sensor("robotindropzone")
 
-class PursueBall(Behavior):
+class PursueBall(Behavior):      
     def on_tick(self):
         #todo send goals to the navigation subsystem
-        gorobot.send_control("gotoobjectposition")
+        gorobot.send_control("gotoobjectposition", self.ball_coords)
     
-    def set_ball(self, ball):
-        self.ball = ball
+    def on_activation(self, ball_coords):
+        self.ball_coords = ball_coords
 
 class GraspAction(Behavior):
     def on_tick(self):
@@ -82,12 +88,10 @@ def my_example_application(api : BdfCallbacks):
     go_to_basket_location = api.register('go_to_basket_location', GoToBasketLocation)
     drop_ball = api.register('drop_ball', DropBall)
 
-    api.connect(a_ball_in_sight, 'get_ball', pursue_ball, 'set_ball')
-
     if not api.check(ball_grasped, "condition_met"):
 
         if api.check(a_ball_in_sight, "condition_met"):
-            api.activate(pursue_ball)
+            api.activate(pursue_ball, api.get(a_ball_in_sight, "closest_ball"))
 
         api.prepare(grasp_action) 
 
