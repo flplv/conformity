@@ -1,12 +1,28 @@
-Readme TODO (What this document should contain):
+This is a project under experimentation. 
 
-Use Cases to show with small snippets:
+We are experimenting with a novel approach to behavior description, our goal is to describe complex robotic behaviour with the simplet logic as possible. 
 
-- At least one simple full demo example
-- How to prepare a behavior with initial conditions before activating it.
+The core model is "when a given state is true, enable a other given behavior" and then simply use ifs and elses as needed to build complex behavior.
 
-Detailed explanations and documentations on:
+This code...
 
-- What is allowed to be used inside the behavior description function and the event handlers 
-  (tickers, etc). Highlight the nonblocking requirement of these callbacks.
-- All the API functions and their side effects, with example usage on each doc.
+ 
+```python
+    if not api.check(ball_grasped, "condition_met"):
+
+        if api.check(a_ball_in_sight, "condition_met"):
+            api.activate(pursue_ball)
+
+        api.prepare(grasp_action) 
+
+        if api.check(a_ball_in_fork, "condition_met") and api.is_prepared(grasp_action):
+            api.activate(grasp_action)
+
+    else:
+        if api.check(in_basket_location, "condition_met"):
+            api.activate(drop_ball)
+        else:
+            api.activate(go_to_basket_location)
+```
+
+... yields this robotic behavior: https://github.com/flplv/conformity/blob/master/conformity-demo.mp4
